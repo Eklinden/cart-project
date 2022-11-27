@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import YearChart from '../../components/YearChart/YearChart';
 import priceData from '../../data/json_award.json';
+import { nobelPriceCateType } from '../../types/types';
 
 const KategoriNumber = () => {
   const [year, setYear] = useState<number>(2019)
   const [yearData, setYearData] = useState({
-    labels: getCategoryByYear().map((data) => data.category.en),
+    labels: getCategoryByYear().map((data: nobelPriceCateType) => data.category),
     datasets: [{
       label: 'Awards',
-      data: getCategoryByYear().map((data) => data.laureates?.length)
+      data: getCategoryByYear().map((data: nobelPriceCateType) => data.times)
     }]
   })
   useEffect(() => {
@@ -16,12 +17,22 @@ const KategoriNumber = () => {
   }, [year])
   
   function getCategoryByYear() {
-    const filteredByYear = priceData.filter((data) => {
-      return parseInt(data.awardYear) === year
+    const filteredByYear: nobelPriceCateType[] = []
+
+    priceData.map((data) => {
+      let category = data.category.en
+      let times = 0
+      if(!data.laureates)
+        return
+      data.laureates.map(()=> times++)
+      if(parseInt(data.awardYear) === year) {
+        filteredByYear.push({category: category, times: times})
+      }
     })
-    if(filteredByYear)
-     return filteredByYear
-    console.log("shit is not working")
+    if(!filteredByYear)
+      return [{category: "corrupt data", times: 0},]
+    
+    return filteredByYear
   }
   
   function handleChange(e: any){
@@ -40,10 +51,10 @@ const KategoriNumber = () => {
 
   const updatePlot = () => {
     setYearData({
-      labels: getCategoryByYear().map((data) => data.category.en),
+      labels: getCategoryByYear().map((data) => data.category),
       datasets: [{
         label: 'Awards',
-        data: getCategoryByYear().map((data) => data.laureates?.length)
+        data: getCategoryByYear().map((data) => data.times)
       }]
     })
   }
