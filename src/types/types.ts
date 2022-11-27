@@ -13,3 +13,8 @@ export type countryType = {
   country: string,
   times: number
 }
+
+export type nobelPriceCateType = {
+  category: string,
+  times: number
+}

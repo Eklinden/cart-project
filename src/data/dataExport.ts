@@ -1,4 +1,4 @@
-import { countryType, extractedPriceType, topTenType } from '../types/types';
+import { countryType, extractedPriceType, nobelPriceCateType, topTenType } from '../types/types';
 import priceData from './json_award.json';
 import personData from './json_laureates.json';
 
@@ -38,6 +38,7 @@ function topTen() {
 
     return 0;
   });
+  sortedArray.reverse();
   let grabbedTopTen = sortedArray.slice(0,9);
   grabbedTopTen.reverse();
   return grabbedTopTen
@@ -129,7 +130,7 @@ function oneTimersCountry() {
   const oneTimers: countryType[] = uniqueArray.filter((data) => data.times === 1)
   return oneTimers
 }
-function countInArrayCountry(array: countryType[], what: any) {
+function countInArrayCountry(array: countryType[], what: countryType) {
   var count = 0;
   for (var i = 0; i < array.length; i++) {
       if (array[i].country === what.country) {
@@ -149,30 +150,32 @@ const categoryData = {
   }]
 }
 function calculateCategories(){
-  let allPricesArray = personData.map((data)=> {
-    return {category: data.nobelPrizes}
+  let allPricesArray: nobelPriceCateType[] = []
+  priceData.map((data)=> {
+    let newData = JSON.stringify(data)
+    let refinedData = JSON.parse(newData)
+    if(!refinedData.category)
+      return
+    allPricesArray.push(countInArrayCategory(priceData, refinedData.category.en))
   })
-  let filteredArray = allPricesArray.map((data) => {
-    return countInArrayCategory(allPricesArray, data.category[0])
-  })
-  const uniqueArray = filteredArray.filter((value, index) => {
+  
+  const uniqueArray: nobelPriceCateType[] = allPricesArray.filter((value, index) => {
     const _value = JSON.stringify(value);
-    return index === filteredArray.findIndex(obj => {
+    return index === allPricesArray.findIndex(obj => {
       return JSON.stringify(obj) === _value;
     });
   });
-  console.log(uniqueArray)
   return uniqueArray
 }
-calculateCategories()
-function countInArrayCategory(array, what) {
+function countInArrayCategory(array: any, what: string) {
   var count = 0;
-  for (var i = 0; i < array.length; i++) {
-      if (array[i].category[0].category.en === what.category.en) {
-          count++;
-      }
+  array.map((data: any)=> {
+    if(data.category.en === what){
+      count++
+    }
+  })
+  return {times: count, category: what};
   }
-  return {times: count, category: what.category.en};
-}
+
 export { menWomenData, topTenData, normalPriceAvarageData, adjustedPriceAvarageData, CountryData, categoryData };
 export default oneTimersCountry
