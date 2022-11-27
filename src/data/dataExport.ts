@@ -40,8 +40,29 @@ function topTen() {
   });
   sortedArray.reverse();
   let grabbedTopTen = sortedArray.slice(0,9);
-  grabbedTopTen.reverse();
-  return grabbedTopTen
+  let addName: topTenType[] = []
+  grabbedTopTen.map((data) => {
+    personData.map((compare) => {
+      if(compare.id === data.name){
+        if(typeof compare.fullName === "undefined") {
+          if(!compare.orgName)
+            return
+          addName.push({
+            name: compare.orgName.en,
+            awards: data.awards
+          })
+        } else {
+          addName.push({
+            name:compare.fullName.en,
+            awards: data.awards
+          })
+        }
+      }
+    })
+  })
+  console.log(addName)
+  addName.reverse();
+  return addName
 }
 
 /* --------------------------------- Price Money Data ----------------------------------------- */
