@@ -6,7 +6,7 @@ import './Country.scss';
 const Country = () => {
   return (
     <main>
-      <h1>The top ten most nobelprice winners</h1>
+      <h1>The most Wins per country</h1>
       <div className='chart-wrapper'>
         <Bar data={CountryData} />
         <h2>Countries with ONE nobelprice winner</h2>

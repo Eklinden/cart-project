@@ -9,8 +9,7 @@ export type extractedPriceType = {
   adjustedPrice: number
 }
 
-export type adjustedPriceType = {
-  year: string,
-  price: [number],
-  adjustedPrice: [number]
+export type countryType = {
+  country: string,
+  times: number
 }

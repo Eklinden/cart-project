@@ -1,4 +1,4 @@
-import { adjustedPriceType, extractedPriceType, topTenType } from '../types/types';
+import { countryType, extractedPriceType, topTenType } from '../types/types';
 import priceData from './json_award.json';
 import personData from './json_laureates.json';
 
@@ -27,9 +27,18 @@ function topTen() {
       awards: data.nobelPrizes.length
     }
   })
-  topTen.sort((function(a, b) {return a.awards < b.awards}))
-  let grabbedTopTen = topTen.slice(0,9);
-  grabbedTopTen.map(({name, awards}) => ({x:name, y:awards}))
+  let sortedArray: topTenType[] = topTen.sort((obj1, obj2) => {
+    if (obj1.awards > obj2.awards) {
+        return 1;
+    }
+
+    if (obj1.awards < obj2.awards) {
+        return -1;
+    }
+
+    return 0;
+  });
+  let grabbedTopTen = sortedArray.slice(0,9);
   grabbedTopTen.reverse();
   return grabbedTopTen
 }
@@ -67,40 +76,60 @@ function priceAvarage() {
 const CountryData = {
   labels: sumCountryWinners().map(e => e.country),
   datasets: [{
-    label: 'Money (SEK)',
+    label: 'Awards',
     data: sumCountryWinners().map(e => e.times)
   }]
 }
 function sumCountryWinners() {
-  let countryWins = personData.map((data) => {return {country: data.birth?.place.country.en, id: data.id}})
-  let timesWon = countryWins.map((data) => {
+  let countryWins: countryType[] = personData.map((data) => {
+    if(!data.birth) {
+      return {country: "corrupt data", times: 0}
+    }
+    return {country: data.birth.place.country.en, times: 0}
+  })
+  let timesWon: countryType[] = countryWins.map((data) => {
     return countInArrayCountry(countryWins, data)
   })
-  const uniqueArray = timesWon.filter((value, index) => {
+  const uniqueArray: countryType[] = timesWon.filter((value, index) => {
     const _value = JSON.stringify(value);
     return index === timesWon.findIndex(obj => {
       return JSON.stringify(obj) === _value;
     });
   });
-  const overOne = uniqueArray.filter((data) => data.times > 1)
-  overOne.sort((function(a, b) {return a.times < b.times}))
-  return overOne
+  const overOne: countryType[] = uniqueArray.filter((data) => data.times > 1)
+  let sortedArray: countryType[] = overOne.sort((obj1: countryType, obj2: countryType) => {
+    if (obj1.times > obj2.times) {
+        return 1;
+    }
+
+    if (obj1.times < obj2.times) {
+        return -1;
+    }
+
+    return 0;
+  });
+  return sortedArray
 }
 function oneTimersCountry() {
-  let countryWins = personData.map((data) => {return {country: data.birth?.place.country.en, id: data.id}})
-  let timesWon = countryWins.map((data) => {
+  let countryWins: countryType[] = personData.map((data) => {
+    if(!data.birth) {
+      return {country: "corrupt data", times: 0}
+    }
+    return {country: data.birth.place.country.en, times: 0}
+  })  
+  let timesWon: countryType[] = countryWins.map((data) => {
     return countInArrayCountry(countryWins, data)
   })
-  const uniqueArray = timesWon.filter((value, index) => {
+  const uniqueArray: countryType[] = timesWon.filter((value, index) => {
     const _value = JSON.stringify(value);
     return index === timesWon.findIndex(obj => {
       return JSON.stringify(obj) === _value;
     });
   });
-  const oneTimers = uniqueArray.filter((data) => data.times === 1)
+  const oneTimers: countryType[] = uniqueArray.filter((data) => data.times === 1)
   return oneTimers
 }
-function countInArrayCountry(array, what) {
+function countInArrayCountry(array: countryType[], what: any) {
   var count = 0;
   for (var i = 0; i < array.length; i++) {
       if (array[i].country === what.country) {
