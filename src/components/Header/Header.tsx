@@ -2,8 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import './Header.scss';
 
-const Header = () => {
-  const [animation, setAnimation] = useState<string>("Fade-in")
+type animationType = {
+  animation: string,
+  setAnimation: any
+}
+const Header = ({animation, setAnimation}: animationType) => {
   const [aniSelected, setAniSelected] = useState<string>("")
   const [chartSelected, setChartSelected] = useState<string>("")
 
@@ -25,9 +28,9 @@ const Header = () => {
         <div className="menu-category">
           <p onClick={selectAni} className={aniSelected}>Animations</p>
           <nav className={aniSelected + " menu"}>
-            <li onClick={(e)=> setAnimation("fade-in")}>Fade-In</li>
-            <li onClick={(e)=> setAnimation("slide-in")}>Slide-In</li>
-            <li onClick={(e)=> setAnimation("rolldown")}>Roll Down</li>
+            <li className={animation === "fade-in" ? "activated": ""} onClick={(e)=> setAnimation("fade-in")}>Fade-In</li>
+            <li className={animation === "slide-in" ? "activated": ""} onClick={(e)=> setAnimation("slide-in")}>Slide-In</li>
+            <li className={animation === "rolldown" ? "activated": ""} onClick={(e)=> setAnimation("rolldown")}>Roll Down</li>
           </nav>
           <p onClick={selectCharts} className={chartSelected}>Charts</p>
           <nav className={chartSelected + " menu"}>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import './App.scss';
 import Header from './components/Header/Header';
@@ -10,19 +11,20 @@ import Price from './views/Price/Price';
 import TopTen from './views/TopTen/TopTen';
 
 function App() {
+  const [animation, setAnimation] = useState<string>("fade-in")
 
   return (
     <div className="App">
-      <Header />
+      <Header animation={animation} setAnimation={setAnimation} />
       <div className="content-wrapper">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/country" element={<Country />} />
-          <Route path="/price" element={<Price />} />
-          <Route path="/categoryNumber" element={<CategoryNumber />} />
-          <Route path="/categoryTotal" element={<CategoryTotal />} />
-          <Route path="/menWomen" element={<MenWomen />} />
-          <Route path="/topTen" element={<TopTen />} />
+          <Route path="/" element={<Home animation={animation} />} />
+          <Route path="/country" element={<Country animation={animation} />} />
+          <Route path="/price" element={<Price animation={animation} />} />
+          <Route path="/categoryNumber" element={<CategoryNumber animation={animation} />} />
+          <Route path="/categoryTotal" element={<CategoryTotal animation={animation} />} />
+          <Route path="/menWomen" element={<MenWomen animation={animation} />} />
+          <Route path="/topTen" element={<TopTen animation={animation} />} />
         </Routes>
       </div>
     </div>

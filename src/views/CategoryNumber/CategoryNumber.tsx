@@ -1,9 +1,14 @@
+import anime from 'animejs';
 import { useEffect, useState } from "react";
 import YearChart from '../../components/YearChart/YearChart';
 import priceData from '../../data/json_award.json';
 import { nobelPriceCateType } from '../../types/types';
 
-const KategoriNumber = () => {
+type animationType = {
+  animation: string
+}
+
+const KategoriNumber = ({animation}: animationType) => {
   const [year, setYear] = useState<number>(2019)
   const [yearData, setYearData] = useState({
     labels: getCategoryByYear().map((data: nobelPriceCateType) => data.category),
@@ -15,6 +20,31 @@ const KategoriNumber = () => {
   useEffect(() => {
     updatePlot()
   }, [year])
+  useEffect(() => {
+    if(animation === "fade-in") {
+      anime({
+        targets: '.wrapper',
+        duration: 1000,
+        opacity: [0, 1],
+        easing: "easeInOutQuad"
+    })
+    } else if(animation === "slide-in") {
+      anime({
+        targets: '.wrapper',
+        duration: 1000,
+        translateX: ["100%", 0],
+        easing: "easeInOutQuad"
+      })
+    } else if(animation === "rolldown") {
+      anime({
+        targets: '.wrapper',
+        duration: 1000,
+        translateY: ["100deg", 0],
+        easing: "easeInOutQuad"
+      })
+    }
+
+  }, [])
   
   function getCategoryByYear() {
     const filteredByYear: nobelPriceCateType[] = []
@@ -59,7 +89,7 @@ const KategoriNumber = () => {
     })
   }
   return (
-    <main>
+    <main className='wrapper'>
       <h1>The top ten most nobelprice winners</h1>
       <input onInput={(e)=> handleChange(e.target)} type="number" defaultValue={2019} min="1901" max="2019"/>
       <div className='chart-wrapper smaller'>

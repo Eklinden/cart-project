@@ -179,7 +179,7 @@ function calculateCategories(){
       return
     allPricesArray.push(countInArrayCategory(priceData, refinedData.category.en))
   })
-  
+  console.log(allPricesArray)
   const uniqueArray: nobelPriceCateType[] = allPricesArray.filter((value, index) => {
     const _value = JSON.stringify(value);
     return index === allPricesArray.findIndex(obj => {
@@ -188,14 +188,14 @@ function calculateCategories(){
   });
   return uniqueArray
 }
-function countInArrayCategory(array: any, what: string) {
+function countInArrayCategory(array: any, category: string) {
   var count = 0;
   array.map((data: any)=> {
-    if(data.category.en === what){
+    if(data.category.en === category){
       count++
     }
   })
-  return {times: count, category: what};
+  return {times: count, category: category};
   }
 
 export { menWomenData, topTenData, normalPriceAvarageData, adjustedPriceAvarageData, CountryData, categoryData };
