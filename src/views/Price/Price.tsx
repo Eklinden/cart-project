@@ -11,7 +11,7 @@ type animationType = {
 const Price = ({animation}: animationType) => {
   const [dataToShow, setDataToShow] = useState(normalPriceAvarageData)
   const [toggleInfl, setToggleInfl] = useState<boolean>(false)
-
+  let letters = ["A","w","a","r","d","M","o","n","e","y","space","p","e","r","space","Y","e","a","r"]
   useEffect(() => {
     if(animation === "fade-in") {
       anime({
@@ -22,9 +22,19 @@ const Price = ({animation}: animationType) => {
     })
     } else if(animation === "slide-in") {
       anime({
-        targets: '.wrapper',
-        duration: 1000,
-        translateX: ["100%", 0],
+        targets: '.wrapper .chart',
+        duration: 1400,
+        translateY: ["20%", 0],
+        opacity: [0, 1],
+        delay: 1400,
+        easing: "easeInOutQuad"
+      })
+      anime({
+        targets: '.title h1',
+        duration: 700,
+        translateY: ["100%", 0],
+        opacity: [0, 1],
+        delay: anime.stagger(50),
         easing: "easeInOutQuad"
       })
     } else if(animation === "rolldown") {
@@ -50,13 +60,21 @@ const Price = ({animation}: animationType) => {
   }
   return (
     <main className='wrapper'>
-      <h1>AwardMoney per Year</h1>
-      <div className='toggle'>
-        <p>Toggle with inflation:</p>
-        <input onClick={toggleInflation} type="checkbox" id="inflation" />
+      <div className='title'>
+        {letters.map((e: string)=> {
+          if(e === "space")
+            return <div className='space'></div>
+          return <h1>{e}</h1>
+        })}
       </div>
-      <div className='chart-wrapper'>
-        <Line data={dataToShow} />
+      <div className="chart">
+        <div className='toggle'>
+          <p>Toggle with inflation:</p>
+          <input onClick={toggleInflation} type="checkbox" id="inflation" />
+        </div>
+        <div className='chart-wrapper'>
+          <Line data={dataToShow} />
+        </div>
       </div>
     </main>
   )

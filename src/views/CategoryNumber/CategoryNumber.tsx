@@ -17,6 +17,7 @@ const KategoriNumber = ({animation}: animationType) => {
       data: getCategoryByYear().map((data: nobelPriceCateType) => data.times)
     }]
   })
+  let letters = ["A","w","a","r","d","s","space","g","i","v","e","n","space","p","e","r","space","y","e","a","r"]
   useEffect(() => {
     updatePlot()
   }, [year])
@@ -30,9 +31,19 @@ const KategoriNumber = ({animation}: animationType) => {
     })
     } else if(animation === "slide-in") {
       anime({
-        targets: '.wrapper',
-        duration: 1000,
-        translateX: ["100%", 0],
+        targets: '.wrapper .chart',
+        duration: 1400,
+        translateY: ["20%", 0],
+        opacity: [0, 1],
+        delay: 1400,
+        easing: "easeInOutQuad"
+      })
+      anime({
+        targets: '.title h1',
+        duration: 700,
+        translateY: ["100%", 0],
+        opacity: [0, 1],
+        delay: anime.stagger(50),
         easing: "easeInOutQuad"
       })
     } else if(animation === "rolldown") {
@@ -90,10 +101,18 @@ const KategoriNumber = ({animation}: animationType) => {
   }
   return (
     <main className='wrapper'>
-      <h1>The top ten most nobelprice winners</h1>
-      <input onInput={(e)=> handleChange(e.target)} type="number" defaultValue={2019} min="1901" max="2019"/>
-      <div className='chart-wrapper smaller'>
-        <YearChart data={yearData} />
+      <div className='title'>
+        {letters.map((e: string)=> {
+          if(e === "space")
+            return <div className='space'></div>
+          return <h1>{e}</h1>
+        })}
+      </div>
+      <div className="chart">
+        <input onInput={(e)=> handleChange(e.target)} type="number" defaultValue={2019} min="1901" max="2019"/>
+        <div className='chart-wrapper smaller'>
+          <YearChart data={yearData} />
+        </div>
       </div>
     </main>
   )

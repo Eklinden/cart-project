@@ -16,9 +16,19 @@ const Home = ({animation}: animationType) => {
     })
     } else if(animation === "slide-in") {
       anime({
-        targets: '.wrapper',
-        duration: 1000,
-        translateX: ["100%", 0],
+        targets: '.wrapper .chart',
+        duration: 1400,
+        translateY: ["20%", 0],
+        opacity: [0, 1],
+        delay: 1400,
+        easing: "easeInOutQuad"
+      })
+      anime({
+        targets: '.title h1',
+        duration: 700,
+        translateY: ["100%", 0],
+        opacity: [0, 1],
+        delay: anime.stagger(50),
         easing: "easeInOutQuad"
       })
     } else if(animation === "rolldown") {

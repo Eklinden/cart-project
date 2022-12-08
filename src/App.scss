@@ -34,3 +34,10 @@ main {
 .circle {
   width: 50%;
 }
+.title {
+  display: flex;
+  justify-content: center;
+  .space {
+    width: 8px;
+  }
+}
