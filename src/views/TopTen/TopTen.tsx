@@ -1,6 +1,6 @@
 import anime from 'animejs';
 import 'chart.js/auto';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { topTenData } from '../../data/dataExport';
 

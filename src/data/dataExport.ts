@@ -4,11 +4,30 @@ import personData from './json_laureates.json';
 
 /* --------------------------------- Men / Women Data ----------------------------------------- */
 const menWomenData = {
-  labels: ['Men', 'Women'],
+  labels: ['Men', 'Women', 'Organisations'],
   datasets: [{
     label: 'Awards',
-    data: [personData.filter((data) => data.gender !== "female").length, personData.filter((data) => data.gender !== "male").length]
+    data: [
+    countOrgs().filter((data) => data === "male").length, 
+    countOrgs().filter((data) => data === "female").length,
+    countOrgs().filter((data) => data !== "male" && data !== "female").length
+  ]
   }]
+}
+function countOrgs () {
+  let organisation: string[] = []
+  personData.filter((data) => {
+    if(data.hasOwnProperty('gender')) {
+      if(!data.gender)
+        return
+      organisation.push(data.gender)
+    } else if(data.hasOwnProperty('orgName')){
+      if(!data.orgName)
+        return
+      organisation.push(data.orgName.en)
+    }
+  })
+  return organisation
 }
 
 /* --------------------------------- Top Ten Data ----------------------------------------- */
@@ -104,10 +123,19 @@ const CountryData = {
 }
 function sumCountryWinners() {
   let countryWins: countryType[] = personData.map((data) => {
-    if(!data.birth) {
-      return {country: "corrupt data", times: 0}
+    if(data.birth) {
+      return {country: data.birth.place.country.en, times: 0}
+    } else if (data.founded !== undefined) {
+      if (data.founded.place.country !== undefined) {
+
+        return {country: data.founded.place.country.en, times: 0}
+      } else {
+        return {country: "unknown", times: 0}
+      }
     }
-    return {country: data.birth.place.country.en, times: 0}
+    else {
+      return {country: "unknown", times: 0}
+    }
   })
   let timesWon: countryType[] = countryWins.map((data) => {
     return countInArrayCountry(countryWins, data)
